@@ -16,10 +16,16 @@ const app = express();
 const allowedOrigins = process.env.ALLOWED_ORIGINS;
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins?.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true,
 }));
-
 app.use(morgan("dev"));
 
 app.use(express.json());
