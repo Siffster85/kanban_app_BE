@@ -10,7 +10,6 @@ import MongoStore from "connect-mongo";
 import { requiresAuth } from "./middleware/auth";
 import cors from "cors";
 
-
 const app = express();
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",") : ["http://localhost:3000"];
