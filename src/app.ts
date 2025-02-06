@@ -16,7 +16,7 @@ app.use(
   cors({
     origin: "https://ylskanban.netlify.app/",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    //credentials: true,
+    credentials: true,
 }),
 );
 
