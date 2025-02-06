@@ -13,7 +13,7 @@ import cors from "cors";
 
 const app = express();
 
-const allowedOrigins = process.env.REACT_APP_FRONTEND_URL;
+const allowedOrigins = process.env.ALLOWED_ORIGINS;
 
 app.use(cors({
   origin: allowedOrigins,
