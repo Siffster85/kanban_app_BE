@@ -48,20 +48,11 @@ const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const auth_1 = require("./middleware/auth");
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",") : ["http://localhost:3000"];
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        }
-        else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
+app.use((0, cors_1.default)({
+    origin: "https://ylskanban.netlify.app/",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
-};
-app.use((0, cors_1.default)(corsOptions));
+}));
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
 app.use((0, express_session_1.default)({
@@ -73,7 +64,7 @@ app.use((0, express_session_1.default)({
     },
     rolling: true,
     store: connect_mongo_1.default.create({
-        mongoUrl: validateEnv_1.default.MONGO_CONNECTION_STRING,
+        mongoUrl: process.env.MONGO_URI,
     }),
 }));
 app.use("/api/tasks", auth_1.requiresAuth, tasksRoute_1.default);

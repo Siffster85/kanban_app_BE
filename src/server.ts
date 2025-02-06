@@ -5,7 +5,7 @@ import app from "./app";
 
 const port = env.PORT;
 
-mongoose.connect(env.MONGO_CONNECTION_STRING)
+mongoose.connect(env.MONGO_URI)
     .then(() => {
       // eslint-disable-next-line no-console
         console.log("Mongoose Connected");
