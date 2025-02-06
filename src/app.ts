@@ -8,8 +8,22 @@ import session from "express-session";
 import env from "./util/validateEnv";
 import MongoStore from "connect-mongo";
 import { requiresAuth } from "./middleware/auth";
+import cors from "cors";
+
 
 const app = express();
+
+const allowedOrigins = process.env.REACT_APP_FRONTEND_URL;
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins?.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+}));
 
 app.use(morgan("dev"));
 
