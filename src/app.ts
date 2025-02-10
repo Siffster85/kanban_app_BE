@@ -14,7 +14,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://ylskanban.netlify.app",
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
 }),
