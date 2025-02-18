@@ -55,7 +55,7 @@ app.use(session({
     },
     rolling: true,
     store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,
+        mongoUrl: process.env.MONGODB_URI,
     }),
 }));
 
