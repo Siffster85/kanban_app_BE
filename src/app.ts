@@ -12,14 +12,35 @@ import cors from "cors";
 
 const app = express();
 
+const allowedOrigins = ["https://ylskanban.netlify.app"]; // Array for future expansion if needed
+
 app.use(
   cors({
-    origin: "https://ylskanban.netlify.app",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) { // Allow requests without origin (like Postman)
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
-    allowedHeaders: ["Content-Type","Authorization","Accept","X-Custom-Header"]
-}),
+    allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Custom-Header"],
+  }),
 );
+
+app.options("*", cors({  // Handle preflight OPTIONS requests for ALL routes (*)
+  origin: function (origin, callback) { // Same origin logic as above.
+      if (!origin || allowedOrigins.includes(origin)) { 
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Must match your main CORS config
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Custom-Header"], // Must match your main CORS config
+}));
 
 app.use(morgan("dev"));
 
