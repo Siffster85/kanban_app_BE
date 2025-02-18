@@ -48,10 +48,32 @@ const connect_mongo_1 = __importDefault(require("connect-mongo"));
 const auth_1 = require("./middleware/auth");
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
+const allowedOrigins = ["https://ylskanban.netlify.app"]; // Array for future expansion if needed
 app.use((0, cors_1.default)({
-    origin: "https://ylskanban.netlify.app/",
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) { // Allow requests without origin (like Postman)
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Custom-Header"],
+}));
+app.options("*", (0, cors_1.default)({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Must match your main CORS config
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Custom-Header"], // Must match your main CORS config
 }));
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.json());
@@ -64,7 +86,7 @@ app.use((0, express_session_1.default)({
     },
     rolling: true,
     store: connect_mongo_1.default.create({
-        mongoUrl: process.env.MONGO_URI,
+        mongoUrl: process.env.MONGODB_URI,
     }),
 }));
 app.use("/api/tasks", auth_1.requiresAuth, tasksRoute_1.default);

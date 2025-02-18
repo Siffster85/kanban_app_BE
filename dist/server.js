@@ -8,7 +8,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const validateEnv_1 = __importDefault(require("./util/validateEnv"));
 const app_1 = __importDefault(require("./app"));
 const port = validateEnv_1.default.PORT;
-mongoose_1.default.connect(validateEnv_1.default.MONGO_URI)
+mongoose_1.default.connect(validateEnv_1.default.MONGODB_URI)
     .then(() => {
     // eslint-disable-next-line no-console
     console.log("Mongoose Connected");
